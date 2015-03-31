@@ -1,0 +1,17 @@
+ASP.NET MVC 5 projekti
+
+Tutoja:
+http://www.asp.net/mvc/overview/getting-started/introduction/getting-started
+https://www.youtube.com/watch?v=VAtVv1Q7ufM (perusteet)
+http://channel9.msdn.com/Series/Customizing-ASPNET-Authentication-with-Identity (käyttäjistä)
+
+Tarvitaan:
+Visual Studio 2013
+
+Käytössä: 
+-Bootstrap
+-font-awesome (ikonit)
+
+Admin-tunnukset:
+user: admin
+pw: Admin_123
