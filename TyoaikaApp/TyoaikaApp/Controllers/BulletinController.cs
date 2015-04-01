@@ -6,17 +6,23 @@ using System.Web.Mvc;
 
 namespace TyoaikaApp.Controllers
 {
-    [Authorize]
-    public class TimesheetController : Controller
+    public class BulletinController : Controller
     {
-        // GET: Timesheet
+        // GET: Bulletin
         public ActionResult Index()
         {
             return View();
         }
+
         public ActionResult Edit()
         {
             return View();
         }
+
+        public ActionResult Delete()
+        {
+            return View();
+        }
+
     }
 }

@@ -3,3 +3,37 @@
 }
 
 <h1>Tiedotteet</h1>
+
+<div class="bulletin-container">
+    @if (User.IsInRole("ROLE_ADMIN") || User.IsInRole("ROLE_SUPER_ADMIN"))
+    {
+        <div class="add-button">
+            <a href="@Url.Action("Index", "Bulletin")" class="btn btn-default"><i class="fa fa-plus fa-lg"></i> Lisää uusi</a>
+        </div>
+    }
+    <div class="bulletin">
+        <div class="bulletin-head">
+            Malliotsikko
+            <div class="date-created">
+                31.3.2015<br />
+                14:34
+            </div>
+        </div>
+        <div class="bulletin-main">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed posuere interdum sem. Quisque ligula eros ullamcorper quis, lacinia quis facilisis sed sapien. Mauris varius diam vitae arcu. Sed arcu lectus auctor vitae, consectetuer et venenatis eget velit. Sed augue orci, lacinia eu tincidunt et eleifend nec lacus. Donec ultricies nisl ut felis, suspendisse potenti.
+        </div>
+        <div class="bulletin-footer">
+            Kirjoittaja: Ylläpito
+            @if (User.IsInRole("ROLE_ADMIN") || User.IsInRole("ROLE_SUPER_ADMIN"))
+            {
+            <div class="admin-buttons">
+                <a href="@Url.Action("Edit", "Bulletin")" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i> Muokkaa</a>
+                <a href="@Url.Action("Delete", "Bulletin")" class="btn btn-default"><i class="fa fa-trash-o fa-lg"></i> Poista</a>
+            </div>
+            }
+        </div>
+    </div>
+
+
+
+</div>

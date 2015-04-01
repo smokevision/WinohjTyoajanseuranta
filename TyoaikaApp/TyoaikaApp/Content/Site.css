@@ -1,17 +1,232 @@
-﻿body {
-    padding-top: 50px;
+﻿
+body {
     padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
+    margin-left: 320px;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.body-content #main-container{
+	overflow: hidden;
+	padding: 2em 1em;
+	text-align: left;
+	margin: 0 auto;
+}
+
+h1{
+    margin: 1em 0;
+}
+
+a{
+	text-decoration: none;
+	color: inherit;
+	border-bottom: dotted 1px rgba(128,128,128,0.5);
+	-moz-transition: color 0.35s ease-in-out, border-bottom-color 0.35s ease-in-out;
+	-webkit-transition: color 0.35s ease-in-out, border-bottom-color 0.35s ease-in-out;
+	-o-transition: color 0.35s ease-in-out, border-bottom-color 0.35s ease-in-out;
+	-ms-transition: color 0.35s ease-in-out, border-bottom-color 0.35s ease-in-out;
+	transition: color 0.35s ease-in-out, border-bottom-color 0.35s ease-in-out;
+	outline: 0;	
+}
+a:hover{
+	color: #992820;
+	border-bottom-color: rgba(255,255,255,0);
+}
+
+.icon {
+    text-decoration: none; 
+
+}
+.icon:before {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-size: 1.25em;
+    text-decoration: none;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; 
+}
+.icon > .label {
+    display: none; 
+}
+
+
+/*
+Navigation    
+*/
+.navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 100%;
+  color: #fff;
+  background: #222629;
+  box-shadow: inset -0.25em 0 0.25em 0 rgba(0, 0, 0, 0.1);
+  text-align: right;
+  overflow-y: auto;
+  overflow-x: hidden; 
+}
+.navigation .top {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%; 
+}
+.navigation .top #logo {
+    position: relative;
+    margin: 0.8em 1.5em 1.8em 1.5em;
+    min-height: 48px;
+    cursor: default; 
+
+}
+.navigation .top #logo #title {
+    position: relative;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.4em;
+    line-height: 0.8em;
+    margin: 1em 0 0 0; 
+}
+.navigation .top #logo p {
+    position: relative;
+    display: block;
+    font-size: 1.2em;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.0em;
+    margin: 0.3em 0 0 0; 
+}
+.navigation .top #logo p .fa {
+    margin-left: 0.2em; 
+}
+.navigation .top #logo a {
+    border: none; 
+    text-decoration: none;
+}
+.navigation .top #nav h3 {
+    font-size: 1.5em;
+    padding: 0 1.1em 0 1.1em;
+    color: #fff; 
+}
+.navigation .top #nav ul {
+    margin-bottom: 0.8em;
+    margin-top: 0.8em;
+    list-style-type: none;
+    padding: 0;
+}
+.navigation .top #nav ul li a {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 1.3em;
+    display: block;
+    padding: 0.8em 1.5em 0.8em 1.5em;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    outline: 0;
+    border: 0;
+    -moz-transition: none;
+    -webkit-transition: none;
+    -o-transition: none;
+    -ms-transition: none;
+    transition: none; 
+}
+.navigation .top #nav ul li a span {
+    position: relative;
+    display: block;
+    font-weight: 300; 
+}
+.navigation .top #nav ul li a span:before {
+    position: absolute;
+    left: 0;
+    color: #41484c;
+    text-align: center;
+    width: 1.25em;
+    line-height: 1.1em; 
+}
+.navigation .top #nav ul li a:hover, .navigation .top #nav ul li a.active {
+    background: rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 0 0.15em 0 rgba(0, 0, 0, 0.125);
+    color: #992820; 
+}
+.navigation .top #nav ul li a:hover span:before, .navigation .top #nav ul li a.active span:before {
+    color: #992820; 
+}
+/*
+Bulletins    
+*/
+.bulletin-container{
+
+}
+
+.bulletin-container .add-button{
+    margin-bottom: 1em;
+}
+
+.bulletin-container .bulletin{
+    position: relative;
+    border: 1px solid #808080;
+    border-radius: 3px;
+}
+
+.bulletin-container .bulletin .bulletin-head{
+    background: #222;
+    color: #ffffff;
+    padding: 0.3em 0.5em;
+    height: 2.2em;
+    line-height: 1.75em;
+    font-size: 1.2em;
+}
+
+.bulletin-container .bulletin .bulletin-head .date-created{
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0.3em 0.5em;
+    text-align: right;
+    font-size: 0.8em;
+    line-height: 1.15em;
+}
+
+.bulletin-container .bulletin .bulletin-main{
+    position: relative;
+    padding: 0.8em 0.5em;
+}
+
+.bulletin-container .bulletin .bulletin-footer{
+    position: relative;
+    padding: 0.3em 0.5em;
+}
+
+.bulletin-container .bulletin .bulletin-footer .admin-buttons{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0.3em 0.5em;
+    text-align: right;
+}
+
+.bulletin-container .bulletin .bulletin-footer .admin-buttons a{
+    margin-left: 0.5em;
+}
+
+.login-container{
+    width: 400px;
+    margin: 10% auto;
+    text-align: center;
+}
+.login-container h2{
+    margin-bottom: 1em;
+}
+
+.login-container .form-group{
+    margin: 0.4em auto;
+}
+
+.login-container .checkbox input[type="checkbox"]{
+    float:none;
 }
