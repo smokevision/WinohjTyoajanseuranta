@@ -1,0 +1,50 @@
+﻿@model TyoaikaApp.Models.Employee
+
+@{
+    ViewBag.Title = "Muokkaa työntekijää";
+}
+
+<h1>Muokkaa työntekijää</h1>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+        
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, "Etunimi:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, "Sukunimi:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.JobTitle, "Työnimike:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.JobTitle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-default"><i class="fa fa-floppy-o"></i> Tallenna</button>
+            </div>
+        </div>
+    </div>
+}
+    
+<div>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-default"><i class="fa fa-arrow-left fa-lg"></i> Palaa takaisin</a>
+</div>

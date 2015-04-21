@@ -160,8 +160,11 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BulletinController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TimesheetController.cs" />
+    <Compile Include="DAL\AppContext.cs" />
+    <Compile Include="DAL\AppInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -175,7 +178,11 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Bulletin.cs" />
+    <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Timesheet.cs" />
+    <Compile Include="Models\TimesheetRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -230,11 +237,22 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Timesheet\Index.cshtml" />
-    <Content Include="Views\Bulletin\Index.cshtml" />
-    <Content Include="Views\Bulletin\Edit.cshtml" />
-    <Content Include="Views\Timesheet\Edit.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
+    <Content Include="Views\Employee\Create.cshtml" />
+    <Content Include="Views\Employee\Delete.cshtml" />
+    <Content Include="Views\Employee\Details.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Bulletin\Create.cshtml" />
+    <Content Include="Views\Bulletin\Delete.cshtml" />
+    <Content Include="Views\Bulletin\Details.cshtml" />
+    <Content Include="Views\Bulletin\Edit.cshtml" />
+    <Content Include="Views\Bulletin\Index.cshtml" />
+    <Content Include="Views\Timesheet\Create.cshtml" />
+    <Content Include="Views\Timesheet\Delete.cshtml" />
+    <Content Include="Views\Timesheet\Details.cshtml" />
+    <Content Include="Views\Timesheet\Edit.cshtml" />
+    <Content Include="Views\Timesheet\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

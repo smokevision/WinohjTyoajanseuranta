@@ -1,9 +1,51 @@
-﻿
+﻿@model TyoaikaApp.Models.Timesheet
+
 @{
     ViewBag.Title = "Työaika";
 }
 
 <h1>Työaika</h1>
+<span class="timesheet-date">@DateTime.Now.ToString("dd.MM.yyyy")</span>
 
-<button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Aloita työaika: @DateTime.Now.ToString("HH:mm")</button>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    if (Model != null)
+    {
+        <p class="timesheet-text">Työaikasi tänään:</p>
+        <table class="timesheet-times">
+            @foreach (var row in Model.TimesheetRows)
+            {
+                <tr>
+                    <td>@row.StartTime.ToString("HH:mm")</td>
+                    <td>-</td>
+                    <td>@(row.StopTime != null ? row.StopTime.Value.ToString("HH:mm") : "")</td>
+                </tr>
+            }
+        </table>
+    
+        var item = Model.TimesheetRows.Last();
+        if (item.StopTime == null)
+        {
+            @ViewBag.testi;
+            <button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Lopeta työaika: @DateTime.Now.ToString("HH:mm")</button>
+            <input type="hidden" value="end" name="state" />
+        }
+        else
+        {
+            <button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Aloita työaika: @DateTime.Now.ToString("HH:mm")</button>
+            <input type="hidden" value="continue" name="state" />
+        }
+        <p>Ruokatauko:  @Html.CheckBox("lunchBreak", htmlAttributes: new { @class = "timesheet-checkbox"})</p>
+        @Html.TextArea("information", htmlAttributes: new { @class = "timesheet-textarea" });
+    }
+    else
+    {
+        <button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Aloita työaika: @DateTime.Now.ToString("HH:mm")</button>
+        <input type="hidden" value="start" name="state" />
+    }
+}
+
+
 
