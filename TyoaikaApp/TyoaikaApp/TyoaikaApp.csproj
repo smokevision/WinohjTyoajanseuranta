@@ -160,11 +160,9 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BulletinController.cs" />
-    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\TimesheetController.cs" />
-    <Compile Include="DAL\AppContext.cs" />
-    <Compile Include="DAL\AppInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -176,11 +174,43 @@
     <Compile Include="Migrations\201503311619178_ChangedTableNames.Designer.cs">
       <DependentUpon>201503311619178_ChangedTableNames.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504221505128_AddedJobTitle.cs" />
+    <Compile Include="Migrations\201504221505128_AddedJobTitle.Designer.cs">
+      <DependentUpon>201504221505128_AddedJobTitle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504221556379_Testi.cs" />
+    <Compile Include="Migrations\201504221556379_Testi.Designer.cs">
+      <DependentUpon>201504221556379_Testi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504221559502_Testi2.cs" />
+    <Compile Include="Migrations\201504221559502_Testi2.Designer.cs">
+      <DependentUpon>201504221559502_Testi2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504221615250_Testi3.cs" />
+    <Compile Include="Migrations\201504221615250_Testi3.Designer.cs">
+      <DependentUpon>201504221615250_Testi3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504221620408_Testi4.cs" />
+    <Compile Include="Migrations\201504221620408_Testi4.Designer.cs">
+      <DependentUpon>201504221620408_Testi4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504221643364_Testi5.cs" />
+    <Compile Include="Migrations\201504221643364_Testi5.Designer.cs">
+      <DependentUpon>201504221643364_Testi5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504221646444_Testi6.cs" />
+    <Compile Include="Migrations\201504221646444_Testi6.Designer.cs">
+      <DependentUpon>201504221646444_Testi6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504221701111_Testi7.cs" />
+    <Compile Include="Migrations\201504221701111_Testi7.Designer.cs">
+      <DependentUpon>201504221701111_Testi7.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Bulletin.cs" />
-    <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Report.cs" />
     <Compile Include="Models\Timesheet.cs" />
     <Compile Include="Models\TimesheetRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -238,11 +268,6 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
-    <Content Include="Views\Employee\Create.cshtml" />
-    <Content Include="Views\Employee\Delete.cshtml" />
-    <Content Include="Views\Employee\Details.cshtml" />
-    <Content Include="Views\Employee\Edit.cshtml" />
-    <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Bulletin\Create.cshtml" />
     <Content Include="Views\Bulletin\Delete.cshtml" />
     <Content Include="Views\Bulletin\Details.cshtml" />
@@ -253,6 +278,7 @@
     <Content Include="Views\Timesheet\Details.cshtml" />
     <Content Include="Views\Timesheet\Edit.cshtml" />
     <Content Include="Views\Timesheet\Index.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -270,6 +296,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503311619178_ChangedTableNames.resx">
       <DependentUpon>201503311619178_ChangedTableNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504221505128_AddedJobTitle.resx">
+      <DependentUpon>201504221505128_AddedJobTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504221556379_Testi.resx">
+      <DependentUpon>201504221556379_Testi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504221559502_Testi2.resx">
+      <DependentUpon>201504221559502_Testi2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504221615250_Testi3.resx">
+      <DependentUpon>201504221615250_Testi3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504221620408_Testi4.resx">
+      <DependentUpon>201504221620408_Testi4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504221643364_Testi5.resx">
+      <DependentUpon>201504221643364_Testi5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504221646444_Testi6.resx">
+      <DependentUpon>201504221646444_Testi6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504221701111_Testi7.resx">
+      <DependentUpon>201504221701111_Testi7.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

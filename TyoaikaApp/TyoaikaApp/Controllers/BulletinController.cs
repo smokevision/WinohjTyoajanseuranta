@@ -6,26 +6,25 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using TyoaikaApp.DAL;
 using TyoaikaApp.Models;
 
 namespace TyoaikaApp.Controllers
 {
     public class BulletinController : Controller
     {
-        private AppContext db = new AppContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Bulletin/Create
         public ActionResult Create()
         {
-            var selectItems = from item in db.Employees
+            var selectItems = from item in db.Users
                               select new SelectListItem
                               {
                                   Text = item.FirstName + " " + item.LastName,
-                                  Value = item.ID.ToString()
+                                  Value = item.Id
                               };
 
-            ViewBag.EmployeeID = selectItems;
+            ViewBag.ApplicationUserID = selectItems;
             return View();
         }
 
@@ -34,7 +33,7 @@ namespace TyoaikaApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,EmployeeID,Header,Content,Date")] Bulletin bulletin)
+        public ActionResult Create([Bind(Include = "ID,ApplicationUserID,Header,Content,Date")] Bulletin bulletin)
         {
             if (ModelState.IsValid)
             {
@@ -44,7 +43,6 @@ namespace TyoaikaApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FirstName", bulletin.EmployeeID);
             return View(bulletin);
         }
 
@@ -61,14 +59,14 @@ namespace TyoaikaApp.Controllers
                 return HttpNotFound();
             }
 
-            var selectItems = from item in db.Employees
+            var selectItems = from item in db.Users
                               select new SelectListItem
                               {
                                   Text = item.FirstName + " " + item.LastName,
-                                  Value = bulletin.EmployeeID.ToString()
+                                  Value = bulletin.ApplicationUserID
                               };
 
-            ViewBag.EmployeeID = selectItems;
+            ViewBag.ApplicationUserID = selectItems;
             return View(bulletin);
         }
 
@@ -77,7 +75,7 @@ namespace TyoaikaApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,EmployeeID,Header,Content,Date")] Bulletin bulletin)
+        public ActionResult Edit([Bind(Include = "ID,ApplicationUserID,Header,Content,Date")] Bulletin bulletin)
         {
             if (ModelState.IsValid)
             {
@@ -85,14 +83,13 @@ namespace TyoaikaApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index", "Home");
             }
-            var selectItems = from item in db.Employees
+            var selectItems = from item in db.Users
                               select new SelectListItem
                               {
                                   Text = item.FirstName + " " + item.LastName,
-                                  Value = bulletin.EmployeeID.ToString()
+                                  Value = bulletin.ApplicationUserID
                               };
-
-            ViewBag.EmployeeID = selectItems;
+            ViewBag.ApplicationUserID = selectItems;
             return View(bulletin);
         }
 

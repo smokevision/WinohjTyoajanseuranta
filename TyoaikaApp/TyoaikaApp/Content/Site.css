@@ -66,6 +66,15 @@ a:hover{
 	width: 100%;
 }
 
+/*
+Common    
+*/
+
+.inline-container{
+    display: inline-block;
+    vertical-align: top;
+    padding: 2em;
+}
 
 /*
 Navigation    
@@ -253,6 +262,7 @@ Timesheet
 
 .timesheet-text{
     font-size: 1.2em;
+    font-weight: bold;
 }
 
 .timesheet-times{
@@ -260,11 +270,16 @@ Timesheet
     font-size: 1.2em;
 }
 
-.timesheet-checkbox{
+.timesheet-information{
+    border-left: 1px solid #333;
+    margin-left: 2em;
+}
+
+.timesheet-information .timesheet-checkbox{
 
 }
 
-.timesheet-textarea{
+.timesheet-information .timesheet-textarea{
     display: block;
     width: 500px;
     height: 200px;

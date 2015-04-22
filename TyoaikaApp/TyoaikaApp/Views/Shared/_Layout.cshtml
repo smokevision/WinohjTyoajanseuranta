@@ -1,4 +1,8 @@
 ﻿@using Microsoft.AspNet.Identity
+@using System.Data.Entity;
+@using System.Linq;
+@using TyoaikaApp.Models;
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +25,13 @@
                 <div id='logo'>
                     <span class="image"><img src="@Url.Content("~/Content/images/logo.png")" alt="TyöaikaAppi logo" /></span>
                     <h1 id="title">
-                        @User.Identity.GetUserName()
+                        @{
+                        ApplicationDbContext db = new ApplicationDbContext();
+                        var userId = User.Identity.GetUserId();
+                        var user = db.Users.Where(i => i.Id == userId).SingleOrDefault();
+                        var username = user.FirstName + " " + user.LastName;
+                        }
+                        @username
                     </h1>
                     <p><a href="javascript:document.getElementById('logoutForm').submit()">Kirjaudu ulos <i class="fa fa-sign-out"></i></a></p>
                 </div>
@@ -36,8 +46,8 @@
                         <h3>Hallinta</h3>
                         <ul>
                             <li><a href="@Url.Action("Edit", "Timesheet")"><span class="icon fa-clock-o">Työajan korjaus</span></a></li>
-                            <li><a href="@Url.Action("Index", "Home")"><span class="icon fa-file-text-o">Raportit</span></a></li>
-                            <li><a href="@Url.Action("Index", "Employee")"><span class="icon fa-users">Työntekijät</span></a></li>
+                            <li><a href="@Url.Action("Index", "Report")"><span class="icon fa-file-text-o">Raportit</span></a></li>
+                            <li><a href="@Url.Action("Manage", "Account")"><span class="icon fa-users">Työntekijät</span></a></li>
                         </ul>
                     }
                     

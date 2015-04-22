@@ -6,35 +6,46 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using TyoaikaApp.DAL;
 using TyoaikaApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace TyoaikaApp.Controllers
 {
     public class TimesheetController : Controller
     {
-        private AppContext db = new AppContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Timesheet
         public ActionResult Index()
         {
-            var timesheet = db.Timesheets.Include(t => t.Employee).Where(i => i.EmployeeID == 1 && i.Date == DateTime.Today).SingleOrDefault();
+            String userId = User.Identity.GetUserId();
+            var timesheet = db.Timesheets.Include(t => t.ApplicationUser).Where(i => i.ApplicationUserID == userId && i.Date == DateTime.Today).SingleOrDefault();
             return View(timesheet);
         }
 
         // POST: Timesheet
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index([Bind(Include = "TimesheetID,EmployeeID,Date,Information,LunchBreak")] Timesheet timesheet)
+        public ActionResult Index([Bind(Include = "TimesheetID,ApplicationUserID,Date,Information,LunchBreak")] Timesheet timesheet, string submitButton)
         {
+            String userId = User.Identity.GetUserId();
+            
             if (ModelState.IsValid)
             {
-                var currentTimesheet = db.Timesheets.Include(t => t.Employee).Where(i => i.EmployeeID == 1 && i.Date == DateTime.Today).SingleOrDefault();
-
-                if (currentTimesheet == null)
+                var currentTimesheet = db.Timesheets.Include(t => t.ApplicationUser).Where(i => i.ApplicationUserID == userId && i.Date == DateTime.Today).SingleOrDefault();
+                if (submitButton == "Save")
                 {
+                    currentTimesheet.LunchBreak = timesheet.LunchBreak;
+                    currentTimesheet.Information = timesheet.Information;
+                    db.Entry(currentTimesheet).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else if (currentTimesheet == null)
+                {
+                    //no timesheet data was found, so start day
                     timesheet.Date = DateTime.Today;
-                    timesheet.EmployeeID = 1;
+                    timesheet.ApplicationUserID = User.Identity.GetUserId();
                     timesheet.Information = "";
                     timesheet.LunchBreak = true;
                     db.Timesheets.Add(timesheet);
@@ -48,6 +59,7 @@ namespace TyoaikaApp.Controllers
                 }
                 else if (currentTimesheet.TimesheetRows.Last().StopTime != null)
                 {
+                    //there is timesheet data for today and last timesheetrow is complete, start new
                     TimesheetRow timesheetRow = new TimesheetRow();
                     timesheetRow.TimesheetID = currentTimesheet.TimesheetID;
                     timesheetRow.StartTime = DateTime.Now;
@@ -58,6 +70,7 @@ namespace TyoaikaApp.Controllers
                 }
                 else if (currentTimesheet.TimesheetRows.Last().StopTime == null)
                 {
+                    //end current timesheetrow
                     currentTimesheet.TimesheetRows.Last().StopTime = DateTime.Now;
                     db.Entry(currentTimesheet).State = EntityState.Modified;
                     db.SaveChanges();
@@ -66,7 +79,7 @@ namespace TyoaikaApp.Controllers
 
             }
 
-            var ts = db.Timesheets.Include(t => t.Employee).Where(i => i.EmployeeID == 1 && i.Date == DateTime.Today).SingleOrDefault();
+            var ts = db.Timesheets.Include(t => t.ApplicationUser).Where(i => i.ApplicationUserID == userId && i.Date == DateTime.Today).SingleOrDefault();
             return View(ts);
         }
 
@@ -88,7 +101,6 @@ namespace TyoaikaApp.Controllers
         // GET: Timesheet/Create
         public ActionResult Create()
         {
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FirstName");
             return View();
         }
 
@@ -97,7 +109,7 @@ namespace TyoaikaApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TimesheetID,EmployeeID,Date,Information,LunchBreak")] Timesheet timesheet)
+        public ActionResult Create([Bind(Include = "TimesheetID,ApplicationUserID,Date,Information,LunchBreak")] Timesheet timesheet)
         {
             if (ModelState.IsValid)
             {
@@ -106,32 +118,21 @@ namespace TyoaikaApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FirstName", timesheet.EmployeeID);
             return View(timesheet);
         }
 
-        // GET: Timesheet/Edit/5
-        public ActionResult Edit(int? id)
+        // GET: Timesheet/Edit
+        public ActionResult Edit()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Timesheet timesheet = db.Timesheets.Find(id);
-            if (timesheet == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FirstName", timesheet.EmployeeID);
-            return View(timesheet);
+            return View();
         }
 
-        // POST: Timesheet/Edit/5
+        // POST: Timesheet/Edit
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TimesheetID,EmployeeID,Date,Information,LunchBreak")] Timesheet timesheet)
+        public ActionResult Edit([Bind(Include = "TimesheetID,ApplicationUserID,Date,Information,LunchBreak")] Timesheet timesheet)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +140,6 @@ namespace TyoaikaApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FirstName", timesheet.EmployeeID);
             return View(timesheet);
         }
 

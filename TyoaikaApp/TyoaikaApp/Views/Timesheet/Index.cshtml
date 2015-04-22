@@ -13,37 +13,39 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     if (Model != null)
     {
-        <p class="timesheet-text">Työaikasi tänään:</p>
-        <table class="timesheet-times">
-            @foreach (var row in Model.TimesheetRows)
+        <div class="inline-container">
+            <p class="timesheet-text">Työaikasi tänään:</p>
+            <table class="timesheet-times">
+                @foreach (var row in Model.TimesheetRows)
+                {
+                    <tr>
+                        <td>@row.StartTime.ToString("HH:mm")</td>
+                        <td>-</td>
+                        <td>@(row.StopTime != null ? row.StopTime.Value.ToString("HH:mm") : "")</td>
+                    </tr>
+                }
+            </table>
+            @{var item = Model.TimesheetRows.Last();}
+            @if (item.StopTime == null)
             {
-                <tr>
-                    <td>@row.StartTime.ToString("HH:mm")</td>
-                    <td>-</td>
-                    <td>@(row.StopTime != null ? row.StopTime.Value.ToString("HH:mm") : "")</td>
-                </tr>
+                @ViewBag.testi;
+                <button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Lopeta työaika: @DateTime.Now.ToString("HH:mm")</button>
             }
-        </table>
-    
-        var item = Model.TimesheetRows.Last();
-        if (item.StopTime == null)
-        {
-            @ViewBag.testi;
-            <button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Lopeta työaika: @DateTime.Now.ToString("HH:mm")</button>
-            <input type="hidden" value="end" name="state" />
-        }
-        else
-        {
-            <button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Aloita työaika: @DateTime.Now.ToString("HH:mm")</button>
-            <input type="hidden" value="continue" name="state" />
-        }
-        <p>Ruokatauko:  @Html.CheckBox("lunchBreak", htmlAttributes: new { @class = "timesheet-checkbox"})</p>
-        @Html.TextArea("information", htmlAttributes: new { @class = "timesheet-textarea" });
+            else
+            {
+                <button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Aloita työaika: @DateTime.Now.ToString("HH:mm")</button>
+            }
+        </div>
+        <div class="inline-container timesheet-information">
+            <h3>Lisätiedot</h3>
+            <p>Ruokatauko:  @Html.CheckBox("lunchBreak", htmlAttributes: new { @class = "timesheet-checkbox" })</p>
+            @Html.TextArea("information", htmlAttributes: new { @class = "timesheet-textarea" })
+            <button type="submit" class="btn btn-default" name="submitButton" value="Save"><i class="fa fa-floppy-o"></i> Tallenna</button>
+        </div>
     }
     else
     {
         <button type="submit" class="btn btn-default"><i class="fa fa-clock-o"></i> Aloita työaika: @DateTime.Now.ToString("HH:mm")</button>
-        <input type="hidden" value="start" name="state" />
     }
 }
 

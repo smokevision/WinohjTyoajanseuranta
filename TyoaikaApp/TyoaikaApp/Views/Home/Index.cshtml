@@ -24,7 +24,7 @@
                 @Html.DisplayFor(modelItem => item.Content)
             </div>
             <div class="bulletin-footer">
-                Kirjoittaja: @Html.DisplayFor(modelItem => item.Employee.FirstName) @Html.DisplayFor(modelItem => item.Employee.LastName)
+                Kirjoittaja: @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
                 @if (User.IsInRole("ROLE_ADMIN") || User.IsInRole("ROLE_SUPER_ADMIN"))
                 {
                 <div class="admin-buttons">
