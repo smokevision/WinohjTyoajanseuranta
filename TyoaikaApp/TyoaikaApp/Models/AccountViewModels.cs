@@ -79,6 +79,10 @@ namespace TyoaikaApp.Models
         [Required]
         [Display(Name = "Sukunimi")]
         public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Työnimike")]
+        public string JobTitle { get; set; }
     }
 
     public class ResetPasswordViewModel

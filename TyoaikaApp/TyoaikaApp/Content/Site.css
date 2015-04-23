@@ -66,6 +66,47 @@ a:hover{
 	width: 100%;
 }
 
+
+/*
+Tables    
+*/
+
+table{
+	width: 100%;
+}
+	
+table{
+	width: 100%;
+	text-align: left;
+}
+		
+table tbody tr:nth-child(2n+2){
+	background: #eee;
+}
+			
+table td{
+	padding: 0.4em 0.6em;
+}
+			
+table th{
+	text-align: left;
+	padding: 0.4em 0.6em;
+	color: #fff;
+	background: #666;
+}
+		
+table thead{
+	background: #444;
+	color: #fff;
+}
+			
+table tfoot{
+	background: #eee;
+}
+			
+table tbody{
+}
+
 /*
 Common    
 */
@@ -74,6 +115,10 @@ Common
     display: inline-block;
     vertical-align: top;
     padding: 2em;
+}
+
+.add-button{
+    margin-bottom: 1em;
 }
 
 /*
@@ -182,10 +227,6 @@ Bulletins
 
 }
 
-.bulletin-container .add-button{
-    margin-bottom: 1em;
-}
-
 .bulletin-container .bulletin{
     position: relative;
     border: 1px solid #ccc;
@@ -284,4 +325,24 @@ Timesheet
     width: 500px;
     height: 200px;
     margin: 1em 0;
+}
+
+
+/*
+Users    
+*/
+.user-table{
+    font-size: 1.1em;
+}
+
+/*
+Report    
+*/
+
+table.report-row{
+    margin: 1.5em 0;
+}
+
+.report-time-error{
+    background-color: rgba(255,0,0,0.5);
 }

@@ -1,0 +1,46 @@
+﻿@model TyoaikaApp.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Työntekijän poistaminen";
+}
+
+<h1>Haluatko varmasti poistaa työntekijän?</h1>
+<div>
+    <dl class="dl-horizontal">
+
+        <dt>
+            Tunnus
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            Nimi
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName), @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            Työnimike
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JobTitle)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i> Poista</button>
+            <a href="@Url.Action("ListUsers", "Account")" class="btn btn-default"><i class="fa fa-undo fa-lg"></i> Peruuta</a>
+        </div>
+    }
+</div>

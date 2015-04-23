@@ -8,11 +8,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - TyöaikaAppi</title>
+    <title>@ViewBag.Title - TyöaikaAppi</title>    
+    @Styles.Render("~/Content/themes/base/css")
     <link href="@Url.Content("~/Content/font-awesome.min.css")" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/themes/base/css")
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
 </head>
 <body>
     @if (Request.IsAuthenticated)
@@ -47,7 +48,7 @@
                         <ul>
                             <li><a href="@Url.Action("Edit", "Timesheet")"><span class="icon fa-clock-o">Työajan korjaus</span></a></li>
                             <li><a href="@Url.Action("Index", "Report")"><span class="icon fa-file-text-o">Raportit</span></a></li>
-                            <li><a href="@Url.Action("Manage", "Account")"><span class="icon fa-users">Työntekijät</span></a></li>
+                            <li><a href="@Url.Action("ListUsers", "Account")"><span class="icon fa-users">Työntekijät</span></a></li>
                         </ul>
                     }
                     
@@ -63,7 +64,9 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/main")
     @RenderSection("scripts", required: false)
 </body>
 </html>

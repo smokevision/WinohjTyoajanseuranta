@@ -1,0 +1,33 @@
+﻿@model IEnumerable<TyoaikaApp.Models.ApplicationUser>
+@{
+    ViewBag.Title = "Työntekijät";
+}
+
+<h1>Työntekijät</h1>
+
+<div class="add-button">
+    <a href="@Url.Action("Create", "Account")" class="btn btn-default"><i class="fa fa-plus fa-lg"></i> Lisää uusi</a>
+</div>
+
+<table class="user-table">
+    <tr>
+        <th>Tunnus</th>
+        <th>Etunimi</th>
+        <th>Sukunimi</th>
+        <th>Työnimike</th>
+        <th></th>
+    </tr>
+@foreach (var user in Model)
+{
+    <tr>
+        <td>@user.UserName</td>
+        <td>@user.FirstName</td>
+        <td>@user.LastName</td>
+        <td>@user.JobTitle</td>
+        <td>
+            <a href="@Url.Action("Edit", "Account", new { id = user.Id })" class="btn btn-default"><i class="fa fa-pencil fa-lg"></i> Muokkaa</a>
+            <a href="@Url.Action("Register", "Account", new { id = user.Id })" class="btn btn-default"><i class="fa fa-trash-o fa-lg"></i> Poista</a>
+        </td>
+    </tr>
+}
+</table>

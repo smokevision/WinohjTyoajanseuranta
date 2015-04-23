@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Owin;
 using TyoaikaApp.Models;
+using System.Net;
+using System.Data.Entity;
 
 namespace TyoaikaApp.Controllers
 {
@@ -18,6 +20,7 @@ namespace TyoaikaApp.Controllers
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -75,7 +78,6 @@ namespace TyoaikaApp.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -84,17 +86,16 @@ namespace TyoaikaApp.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email};
+                var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, JobTitle = model.JobTitle};
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInAsync(user, isPersistent: false);
+                    //await SignInAsync(user, isPersistent: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -102,7 +103,7 @@ namespace TyoaikaApp.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("ListUsers");
                 }
                 else
                 {
@@ -464,6 +465,88 @@ namespace TyoaikaApp.Controllers
                 UserManager = null;
             }
             base.Dispose(disposing);
+        }
+
+
+        // GET: /Users/List
+        public ActionResult ListUsers()
+        {
+            var users = db.Users.Where(i => i.Id != "569c9c48-f535-4bc5-adc9-e568c5b1216a");
+            return View(users.ToList());
+        }
+
+        // GET: /Users/Delete/5
+        public ActionResult Delete(String id)
+        {
+            if (id == null || id.Equals(""))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser user = db.Users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        // POST: /Users/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(String id)
+        {
+            ApplicationUser user = db.Users.Find(id);
+            db.Users.Remove(user);
+            db.SaveChanges();
+            return RedirectToAction("ListUsers");
+        }
+
+
+        // GET: /Users/Edit/5
+        public ActionResult Edit(String id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser user = db.Users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(user);
+        }
+
+        // POST: /Users/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ApplicationUser user, string submitButton)
+        {
+            if (ModelState.IsValid)
+            {
+                if (submitButton == "SaveDetails")
+                {
+                    ApplicationUser currentUser = db.Users.Find(user.Id);
+                    currentUser.FirstName = user.FirstName;
+                    currentUser.LastName = user.LastName;
+                    currentUser.JobTitle = user.JobTitle;
+                    currentUser.Email = user.Email;
+                    currentUser.UserName = user.UserName;
+                    db.Entry(currentUser).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("ListUsers");
+                }
+                else if (submitButton == "ChangePassword")
+                {
+                    //db.Entry(bulletin).State = EntityState.Modified;
+                    //db.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            return View(user);
         }
 
         #region Helpers

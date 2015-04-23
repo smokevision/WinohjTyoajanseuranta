@@ -3,94 +3,81 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TyoaikaApp.Models;
 
 namespace TyoaikaApp.Controllers
 {
     public class ReportController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Report
         public ActionResult Index()
         {
+            var selectItems = from item in db.Users where item.UserName != "admin"
+                              select new SelectListItem
+                              {
+                                  Text = item.FirstName + " " + item.LastName,
+                                  Value = item.Id
+                              };
+            ViewBag.ApplicationUserID = selectItems;
             return View();
         }
 
         // POST: Report
         [HttpPost]
-        public ActionResult Index(string submitButton)
+        public ActionResult Index(Report report)
         {
-            return View();
-        }
-
-        // GET: Report/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Report/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Report/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                return RedirectToAction("Compose", report);
+            }
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+
+            return View(report);
         }
 
-        // GET: Report/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Report/Compose
+        public ActionResult Compose(Report report)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = db.Users.Find(report.ApplicationUserID);
+                report.ApplicationUser = user;
+                var timesheets = db.Timesheets.Where( t => t.ApplicationUserID == report.ApplicationUserID && t.Date >= report.StartDate && t.Date <= report.EndDate);
+                List<Timesheet> timesheetList = timesheets.ToList();
+                report.ReportRows = new List<ReportRow>();
+                //total worktimes
+                report.TimeSum = TimeSpan.Zero;
+                report.EveningSum = TimeSpan.Zero;
+                report.NightSum = TimeSpan.Zero;
+                report.SundaySum = TimeSpan.Zero;
+
+                for (var dt = report.StartDate; dt <= report.EndDate; dt = dt.AddDays(1))
+                {
+                    ReportRow reportRow = new ReportRow();
+                    reportRow.Date = dt;
+                    if (timesheetList.FindIndex(t => t.Date == dt) >= 0)
+                    {
+                        //there is timesheet data for the day in question
+                        reportRow.Timesheet = timesheetList.Find(t => t.Date == dt);
+                        //count total worktime for this day
+                        foreach (var timesheetRow in reportRow.Timesheet.TimesheetRows)
+                        {
+                            if (timesheetRow.StopTime != null)
+                            {
+                                report.TimeSum = report.TimeSum.Add(timesheetRow.StopTime.Value - timesheetRow.StartTime);
+                            }
+                        }
+
+                    }
+                    report.ReportRows.Add(reportRow);
+                }
+
+                return View(report);
+            }
+            return RedirectToAction("Index");
         }
 
-        // POST: Report/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Report/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Report/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }

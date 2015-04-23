@@ -1,0 +1,80 @@
+﻿@model TyoaikaApp.Models.Report
+@{
+    ViewBag.Title = "Raportti";
+}
+
+<h1>Raportti</h1>
+<h4>Työntekijä: @Model.ApplicationUser.FirstName @Model.ApplicationUser.LastName</h4>
+<h4>Aikaväli: @Model.StartDate.ToString("dd.MM.yyyy") - @Model.EndDate.ToString("dd.MM.yyyy")</h4>
+
+@foreach (var row in Model.ReportRows) {
+    <table class="report-row">
+        <tr>
+            <th colspan="4">@row.Date.ToString("dd.MM.yyyy") @row.Date.ToString("dddd", new System.Globalization.CultureInfo("fi-FI"))</th>
+        </tr>
+        @if (row.Timesheet != null)
+        {
+            <tr>
+                <td>Tuntityyppi:</td>
+                <td>Alku:</td>
+                <td>Loppu:</td>
+                <td>Kesto:</td>
+            </tr>
+            foreach (var day in row.Timesheet.TimesheetRows)
+            {
+                <tr class="report-time-row">
+                    <td>Perustunti</td>
+                    <td>@day.StartTime.ToString("HH:mm")</td>
+                    @if(day.StopTime != null){
+                        <td>@day.StopTime.Value.ToString("HH:mm")</td>
+                        <td>
+                            @{String length = (day.StopTime.Value - day.StartTime).ToString("hh':'mm");}
+                            @length
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="report-time-error"></td>
+                        <td></td>
+                    }
+                    
+                    
+                </tr>
+            }
+            <tr>
+                <td colspan="4">Ruokatauko: @(row.Timesheet.LunchBreak == true ? "Kyllä" : "Ei")</td>
+            </tr>
+            <tr>
+                <td colspan="4">Lisätiedot: @row.Timesheet.Information</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">Ei tietoja</td>
+            </tr>
+        }
+    </table>
+}
+
+<div class="report-summary">
+    <h2>Yhteenveto</h2>
+    <table class="report-summary-table">
+        <tr>
+            <td>Perustunti:</td>
+            <td>@Model.TimeSum.ToString("hh':'mm")</td>
+        </tr>
+        <tr>
+            <td>Iltalisä:</td>
+            <td>@Model.EveningSum.ToString("hh':'mm")</td>
+        </tr>
+        <tr>
+            <td>Yölisä:</td>
+            <td>@Model.NightSum.ToString("hh':'mm")</td>
+        </tr>
+        <tr>
+            <td>Sunnuntailisä:</td>
+            <td>@Model.SundaySum.ToString("hh':'mm")</td>
+        </tr>
+    </table>
+</div>
