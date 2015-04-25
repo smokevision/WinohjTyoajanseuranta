@@ -311,7 +311,7 @@
     <Content Include="Views\Timesheet\Create.cshtml" />
     <Content Include="Views\Timesheet\Delete.cshtml" />
     <Content Include="Views\Timesheet\Details.cshtml" />
-    <Content Include="Views\Timesheet\Edit.cshtml" />
+    <Content Include="Views\Timesheet\Manage.cshtml" />
     <Content Include="Views\Timesheet\Index.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="Views\Account\ListUsers.cshtml" />

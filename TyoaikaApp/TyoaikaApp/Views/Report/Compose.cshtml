@@ -15,10 +15,10 @@
         @if (row.Timesheet != null)
         {
             <tr>
-                <td>Tuntityyppi:</td>
-                <td>Alku:</td>
-                <td>Loppu:</td>
-                <td>Kesto:</td>
+                <td><b>Tuntityyppi:</b></td>
+                <td><b>Alku:</b></td>
+                <td><b>Loppu:</b></td>
+                <td><b>Kesto:</b></td>
             </tr>
             foreach (var day in row.Timesheet.TimesheetRows)
             {
@@ -41,11 +41,11 @@
                     
                 </tr>
             }
-            <tr>
-                <td colspan="4">Ruokatauko: @(row.Timesheet.LunchBreak == true ? "Kyllä" : "Ei")</td>
+            <tr class="report-lunch-row">
+                <td colspan="4"><b>Ruokatauko:</b> @(row.Timesheet.LunchBreak == true ? "Kyllä" : "Ei")</td>
             </tr>
-            <tr>
-                <td colspan="4">Lisätiedot: @row.Timesheet.Information</td>
+            <tr class="report-info-row">
+                <td colspan="4"><b>Lisätiedot:</b> @row.Timesheet.Information</td>
             </tr>
         }
         else

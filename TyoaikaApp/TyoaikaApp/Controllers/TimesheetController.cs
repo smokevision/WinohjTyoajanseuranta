@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using TyoaikaApp.Models;
 using Microsoft.AspNet.Identity;
+using System.Globalization;
 
 namespace TyoaikaApp.Controllers
 {
@@ -121,26 +122,162 @@ namespace TyoaikaApp.Controllers
             return View(timesheet);
         }
 
-        // GET: Timesheet/Edit
-        public ActionResult Edit()
+        // GET: Timesheet/Manage
+        public ActionResult Manage()
         {
+
+            var selectItems = from item in db.Users
+                              select new SelectListItem
+                              {
+                                  Text = item.FirstName + " " + item.LastName,
+                                  Value = item.Id
+                              };
+
+            ViewBag.ApplicationUsers = selectItems;
+
             return View();
         }
 
-        // POST: Timesheet/Edit
+        // POST: Timesheet/Manage
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TimesheetID,ApplicationUserID,Date,Information,LunchBreak")] Timesheet timesheet)
+        public ActionResult Manage(Timesheet timesheet, string ApplicationUsers, string inputDate, string submitButton)
         {
-            if (ModelState.IsValid)
+            var selectItems = from item in db.Users
+                              select new SelectListItem
+                              {
+                                  Text = item.FirstName + " " + item.LastName,
+                                  Value = item.Id
+                              };
+
+            ViewBag.ApplicationUsers = selectItems;
+
+            if (submitButton == "search")
             {
-                db.Entry(timesheet).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //user has searched for a day
+                string DATE_FORMAT = "dd.MM.yyyy";
+                DateTime searchDate;
+                if (DateTime.TryParseExact(inputDate, DATE_FORMAT, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out searchDate))
+                {
+                    Timesheet curTimesheet = db.Timesheets.Where(t => t.ApplicationUserID == ApplicationUsers && t.Date == searchDate).SingleOrDefault();
+                    if (curTimesheet == null)
+                    {
+                        ApplicationUser timesheetUser = db.Users.Where(u => u.Id == ApplicationUsers).Single();
+                        timesheet.ApplicationUserID = ApplicationUsers;
+                        timesheet.ApplicationUser = timesheetUser;
+                        timesheet.Date = searchDate;
+                        timesheet.Information = "";
+                        timesheet.LunchBreak = true;
+                    }
+                    else
+                    {
+                        timesheet = curTimesheet;
+                    }
+                    return View(timesheet);
+                }else
+                {
+                    ViewBag.messageError = "Virheellinen päivämäärä.";
+                    return View();
+                }
+
             }
-            return View(timesheet);
+            else if (submitButton == "save")
+            {
+                //form with edited timesheet data was submitted
+                string[] startTimes = Request.Form.GetValues("startTime");
+                string[] stopTimes = Request.Form.GetValues("stopTime");
+                Timesheet curTimesheet = db.Timesheets.Where(t => t.TimesheetID == timesheet.TimesheetID).SingleOrDefault();
+                if (curTimesheet != null)
+                {
+                    //we have timesheet, update data
+                    curTimesheet.Information = timesheet.Information;
+                    curTimesheet.LunchBreak = timesheet.LunchBreak;
+                    string date = curTimesheet.Date.ToString("dd.MM.yyyy");
+                    //remove all old timesheetrows
+                    db.TimesheetRows.RemoveRange(curTimesheet.TimesheetRows);
+                    for (int i = 0; i < startTimes.Count(); i++)
+                    {
+                        TimesheetRow newRow = new TimesheetRow();
+                        newRow.TimesheetID = curTimesheet.TimesheetID;
+                        DateTime parsedStart;
+                        DateTime parsedStop;
+                        string startTime = curTimesheet.Date.ToString("dd.MM.yyyy") + " " + startTimes[i];
+                        string stopTime = curTimesheet.Date.ToString("dd.MM.yyyy") + " " + stopTimes[i];
+                        if (DateTime.TryParse(startTime, out parsedStart))
+                        {
+                            newRow.StartTime = parsedStart;
+                        }
+                        else
+                        {
+                            ViewBag.messageError = "Lomake sisälsi virheellisen alkuajan.";
+                            return View(curTimesheet);
+                        }
+
+                        if (DateTime.TryParse(stopTime, out parsedStop))
+                        {
+                            newRow.StopTime = parsedStop;
+                        }
+                        else
+                        {
+                            newRow.StopTime = null;
+                        }
+                        db.TimesheetRows.Add(newRow);
+                    }
+                    db.Entry(curTimesheet).State = EntityState.Modified;
+                    db.SaveChanges();
+                    ViewBag.messageSuccess = "Päivän tiedot tallennettu.";
+                    return View();
+                }
+                else
+                {
+                    //no timesheet found, create new
+                    timesheet.ApplicationUserID = ApplicationUsers;
+                    ApplicationUser user = db.Users.Find(ApplicationUsers);
+                    timesheet.ApplicationUser = user;
+                    timesheet.Information = timesheet.Information;
+                    timesheet.LunchBreak = timesheet.LunchBreak;
+                    db.Timesheets.Add(timesheet);
+
+                    for (int i = 0; i < startTimes.Count(); i++)
+                    {
+                        TimesheetRow newRow = new TimesheetRow();
+                        newRow.TimesheetID = timesheet.TimesheetID;
+                        DateTime parsedStart;
+                        DateTime parsedStop;
+                        string startTime = timesheet.Date.ToString("dd.MM.yyyy") + " " + startTimes[i];
+                        string stopTime = timesheet.Date.ToString("dd.MM.yyyy") + " " + stopTimes[i];
+                        if (DateTime.TryParse(startTime, out parsedStart))
+                        {
+                            newRow.StartTime = parsedStart;
+                        }
+                        else
+                        {
+                            ViewBag.messageError = "Lomake sisälsi virheellisen alkuajan.";
+                            return View(timesheet);
+                        }
+
+                        if (DateTime.TryParse(stopTime, out parsedStop))
+                        {
+                            newRow.StopTime = parsedStop;
+                        }
+                        else
+                        {
+                            newRow.StopTime = null;
+                        }
+                        db.TimesheetRows.Add(newRow);
+                    }
+                    db.SaveChanges();
+                    ViewBag.messageSuccess = "Päivän tiedot tallennettu.";
+                    return View();
+                }
+            }
+            else
+            {
+                //something has gone wrong, just display the page
+                return View();
+            }
         }
 
         // GET: Timesheet/Delete/5

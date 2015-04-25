@@ -1,0 +1,117 @@
+﻿@model TyoaikaApp.Models.Timesheet
+@{
+    ViewBag.Title = "Työajan korjaus";
+}
+
+<h1>Työajan korjaus</h1>
+@if(ViewBag.messageError != null){
+    <div class="message error">
+        @ViewBag.messageError
+    </div>
+}
+@if (ViewBag.messageSuccess != null)
+{
+    <div class="message success">
+        @ViewBag.messageSuccess
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.Label("Työntekijä:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ApplicationUsers", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Päivä:", new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBox("inputDate", null, htmlAttributes: new { @class = "form-control", @id = "datepicker1" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" name="submitButton" value="search" class="btn btn-default"><i class="fa fa-search"></i> Hae työnpäivän tiedot</button>
+            </div>
+        </div>
+
+    </div>
+    
+    if (Model != null)
+    {
+        <h3>@Model.ApplicationUser.FirstName @Model.ApplicationUser.LastName</h3>
+        <h4>@Model.Date.ToString("dd.MM.yyyy")</h4>
+        @Html.HiddenFor(model => model.TimesheetID)
+        @Html.HiddenFor(model => model.Date)
+        <table class="timesheet-manage-times">
+            <tr>
+                <th>Alku:</th>
+                <th>Loppu:</th>
+                <th></th>
+            </tr>
+            @if (Model.TimesheetRows != null)
+            {
+                var count = 0;
+                foreach (var row in Model.TimesheetRows)
+                {
+                    <tr class="timesheet-manage-row">
+                        <td>@Html.TextBox("startTime", row.StartTime.ToString("HH:mm"), new { @class = "form-control", @placeholder = "HH:mm" })</td>
+                        <td>
+                            @{
+                                string stopTime = "";
+                                if (row.StopTime != null)
+                                {
+                                    stopTime = row.StopTime.Value.ToString("HH:mm");
+                                }
+                            }
+                            @Html.TextBox("stopTime", stopTime, new { @class = "form-control", @placeholder = "HH:mm" })
+                        </td>
+                        <td>
+                        @if (count > 0)
+                        {
+                            <a class='btn btn-default row-delete'><i class='fa fa-trash-o'></i></a>
+                        }    
+                        </td>
+                    </tr>
+                    count++;
+                }
+            }
+            else
+            {
+                <tr class="timesheet-manage-row">
+                    <td>@Html.TextBox("startTime", null, new { @class = "form-control", @placeholder = "HH:mm" })</td>
+                    <td>@Html.TextBox("stopTime", null, new { @class = "form-control", @placeholder = "HH:mm" })</td>
+                    <td></td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3"><a class="btn btn-default add-row"><i class="fa fa-plus"></i> Lisää rivi</a></td>
+            </tr>
+        </table>
+        <div class="timesheet-manage-information">
+            <h3>Lisätiedot</h3>
+            <p>Ruokatauko:  @Html.CheckBoxFor(m => m.LunchBreak, htmlAttributes: new { @class = "timesheet-checkbox" })</p>
+            @Html.TextAreaFor(m => m.Information, htmlAttributes: new { @class = "timesheet-textarea" })
+        </div>
+        <button type="submit" class="btn btn-default" name="submitButton" value="save"><i class="fa fa-floppy-o"></i> Tallenna</button>
+
+    }
+}
+
+<script type="text/javascript">
+    $(document).on("click", ".add-row", function () {
+        var $row = $("<tr class='timesheet-manage-row'>" +
+            "<td><input class='form-control text-box single-line' name='startTime' type='text' placeholder='HH:mm'/></td>" +
+            "<td><input class='form-control text-box single-line' name='stopTime' type='text' placeholder='HH:mm'/></td>" +
+            "<td><a class='btn btn-default row-delete'><i class='fa fa-trash-o'></i></a></td></tr>");
+        $row.insertAfter($(".timesheet-manage-row").filter(":last"));
+    });
+    $(document).on("click", ".row-delete", function () {
+        $(this).parent().parent().remove();
+    });
+</script>
