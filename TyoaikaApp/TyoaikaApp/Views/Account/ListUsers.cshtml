@@ -10,7 +10,7 @@
 </div>
 
 <table class="user-table">
-    <tr>
+    <tr class="user-header">
         <th>Tunnus</th>
         <th>Etunimi</th>
         <th>Sukunimi</th>
@@ -19,7 +19,7 @@
     </tr>
 @foreach (var user in Model)
 {
-    <tr>
+    <tr class="user-info">
         <td>@user.UserName</td>
         <td>@user.FirstName</td>
         <td>@user.LastName</td>

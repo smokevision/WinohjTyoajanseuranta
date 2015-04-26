@@ -15,7 +15,7 @@
     @foreach (var item in Model) {
         <div class="bulletin">
             <div class="bulletin-head">
-                @Html.DisplayFor(modelItem => item.Header)
+                <span class="bulletin-title">@Html.DisplayFor(modelItem => item.Header)</span>
                 <div class="date-created">
                     @Html.DisplayFor(modelItem => item.Date)
                 </div>
