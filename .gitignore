@@ -151,3 +151,7 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+TyoaikaApp/TyoaikaApp/App_Data/aspnet-TyoaikaApp-20150331025833.mdf
+*.ldf
+*.ldf
+TyoaikaApp/TyoaikaApp/App_Data/aspnet-TyoaikaApp-20150331025833_log.ldf
