@@ -397,3 +397,27 @@ table.report-row{
 .report-info-row{
 
 }
+
+/*
+Datepicker
+*/ 
+
+.ui-datepicker-calendar {
+ background-color: white;
+}
+
+.ui-datepicker .ui-datepicker-prev-hover,
+.ui-datepicker .ui-datepicker-next-hover {
+ cursor: pointer;
+}
+
+.ui-datepicker-header   {
+ background-color: white;
+ border-top-left-radius: 5px;
+ border-top-right-radius: 5px;
+ text-align: center;
+}
+
+.ui-datepicker-title    {
+ font-weight: bold;
+}
