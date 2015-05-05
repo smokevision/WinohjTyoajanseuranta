@@ -11,9 +11,9 @@ namespace TyoaikaApp.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public TimeSpan TimeSum { get; set; }
-        public TimeSpan EveningSum { get; set; }
-        public TimeSpan NightSum { get; set; }
-        public TimeSpan SundaySum { get; set; }
+        public TimeSpan TimeTotal { get; set; }
+        public int LunchBreaks { get; set; }
+        public TimeSpan LunchBreakTime { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ICollection<ReportRow> ReportRows { get; set; }

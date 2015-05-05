@@ -62,19 +62,15 @@
     <table class="report-summary-table">
         <tr>
             <td>Perustunti:</td>
-            <td>@Model.TimeSum.ToString("hh':'mm")</td>
+            <td>@string.Format("{0}:{1}", (int)Model.TimeSum.TotalHours, Model.TimeSum.Minutes)</td>
         </tr>
         <tr>
-            <td>Iltalisä:</td>
-            <td>@Model.EveningSum.ToString("hh':'mm")</td>
+            <td>Ruokatauot:</td>
+            <td>@Model.LunchBreaks.ToString() (@string.Format("{0}:{1}", (int)Model.LunchBreakTime.TotalHours, Model.LunchBreakTime.Minutes))</td>
         </tr>
         <tr>
-            <td>Yölisä:</td>
-            <td>@Model.NightSum.ToString("hh':'mm")</td>
-        </tr>
-        <tr>
-            <td>Sunnuntailisä:</td>
-            <td>@Model.SundaySum.ToString("hh':'mm")</td>
+            <td>Yhteensä:</td>
+            <td>@string.Format("{0}:{1}", (int)Model.TimeTotal.TotalHours, Model.TimeTotal.Minutes)</td>
         </tr>
     </table>
 </div>

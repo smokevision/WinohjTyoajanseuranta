@@ -7,13 +7,15 @@ using TyoaikaApp.Models;
 
 namespace TyoaikaApp.Controllers
 {
+    [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
     public class ReportController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Report
         public ActionResult Index()
         {
-            var selectItems = from item in db.Users where item.UserName != "admin"
+            var selectItems = from item in db.Users 
+                              where item.UserName != "admin"
                               select new SelectListItem
                               {
                                   Text = item.FirstName + " " + item.LastName,
@@ -48,9 +50,9 @@ namespace TyoaikaApp.Controllers
                 report.ReportRows = new List<ReportRow>();
                 //total worktimes
                 report.TimeSum = TimeSpan.Zero;
-                report.EveningSum = TimeSpan.Zero;
-                report.NightSum = TimeSpan.Zero;
-                report.SundaySum = TimeSpan.Zero;
+                report.TimeTotal = TimeSpan.Zero;
+                report.LunchBreaks = 0;
+                report.LunchBreakTime = TimeSpan.Zero;
 
                 for (var dt = report.StartDate; dt <= report.EndDate; dt = dt.AddDays(1))
                 {
@@ -69,9 +71,18 @@ namespace TyoaikaApp.Controllers
                             }
                         }
 
+                        if (reportRow.Timesheet.LunchBreak)
+                        {
+                            report.LunchBreaks++;
+                            report.LunchBreakTime = report.LunchBreakTime.Add(TimeSpan.FromMinutes(30));
+                        }
+
                     }
                     report.ReportRows.Add(reportRow);
                 }
+
+                report.TimeTotal = report.TimeSum;
+                report.TimeTotal = report.TimeTotal.Subtract(TimeSpan.FromMinutes(report.LunchBreaks * 30));
 
                 return View(report);
             }

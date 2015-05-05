@@ -469,6 +469,7 @@ namespace TyoaikaApp.Controllers
 
 
         // GET: /Users/List
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         public ActionResult ListUsers()
         {
             var users = db.Users.Where(i => i.Id != "569c9c48-f535-4bc5-adc9-e568c5b1216a");
@@ -476,6 +477,7 @@ namespace TyoaikaApp.Controllers
         }
 
         // GET: /Users/Delete/5
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         public ActionResult Delete(String id)
         {
             if (id == null || id.Equals(""))
@@ -491,6 +493,7 @@ namespace TyoaikaApp.Controllers
         }
 
         // POST: /Users/Delete/5
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(String id)
@@ -503,6 +506,7 @@ namespace TyoaikaApp.Controllers
 
 
         // GET: /Users/Edit/5
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         public ActionResult Edit(String id)
         {
             if (id == null)
@@ -519,8 +523,7 @@ namespace TyoaikaApp.Controllers
         }
 
         // POST: /Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ApplicationUser user, string submitButton)

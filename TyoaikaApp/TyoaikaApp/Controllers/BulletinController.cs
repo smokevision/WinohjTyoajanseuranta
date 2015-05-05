@@ -10,6 +10,7 @@ using TyoaikaApp.Models;
 
 namespace TyoaikaApp.Controllers
 {
+    [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
     public class BulletinController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -17,6 +18,7 @@ namespace TyoaikaApp.Controllers
         // GET: Bulletin/Create
         public ActionResult Create()
         {
+
             var selectItems = from item in db.Users
                               select new SelectListItem
                               {
@@ -29,8 +31,6 @@ namespace TyoaikaApp.Controllers
         }
 
         // POST: Bulletin/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,ApplicationUserID,Header,Content,Date")] Bulletin bulletin)
@@ -71,8 +71,6 @@ namespace TyoaikaApp.Controllers
         }
 
         // POST: Bulletin/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,ApplicationUserID,Header,Content,Date")] Bulletin bulletin)

@@ -12,6 +12,7 @@ using System.Globalization;
 
 namespace TyoaikaApp.Controllers
 {
+    [Authorize]
     public class TimesheetController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -84,49 +85,13 @@ namespace TyoaikaApp.Controllers
             return View(ts);
         }
 
-        // GET: Timesheet/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Timesheet timesheet = db.Timesheets.Find(id);
-            if (timesheet == null)
-            {
-                return HttpNotFound();
-            }
-            return View(timesheet);
-        }
-
-        // GET: Timesheet/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Timesheet/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TimesheetID,ApplicationUserID,Date,Information,LunchBreak")] Timesheet timesheet)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Timesheets.Add(timesheet);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(timesheet);
-        }
-
         // GET: Timesheet/Manage
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         public ActionResult Manage()
         {
 
             var selectItems = from item in db.Users
+                              where item.UserName != "admin"
                               select new SelectListItem
                               {
                                   Text = item.FirstName + " " + item.LastName,
@@ -139,8 +104,7 @@ namespace TyoaikaApp.Controllers
         }
 
         // POST: Timesheet/Manage
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Manage(Timesheet timesheet, string ApplicationUsers, string inputDate, string submitButton)
@@ -281,6 +245,7 @@ namespace TyoaikaApp.Controllers
         }
 
         // GET: Timesheet/Delete/5
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -296,6 +261,7 @@ namespace TyoaikaApp.Controllers
         }
 
         // POST: Timesheet/Delete/5
+        [Authorize(Roles = "ROLE_ADMIN, ROLE_SUPER_ADMIN")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
